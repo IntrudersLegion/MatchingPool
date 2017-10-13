@@ -1,30 +1,37 @@
 var net = require('net');
+var colors = require('colors');
+
+var server = net.createServer();
 
 var HOST = '127.0.0.1';
-var PORT = 6969;
+var PORT = 1488;
 
-// Create a server instance, and chain the listen function to it
-// The function passed to net.createServer() becomes the event handler for the 'connection' event
-// The sock object the callback function receives UNIQUE for each connection
-net.createServer(function(sock) {
+//EDD que tiene los clientes conectados, la idea es extender esto y hacerlo mas eficiente
+var clients = [];
 
-    // We have a connection - a socket object is assigned to the connection automatically
-    console.log('CONNECTED: ' + sock.remoteAddress +':'+ sock.remotePort);
+//cada vez que se conecta un cliente al server se ejecuta esto
+server.on('connection',function(socket){
 
-    // Add a 'data' event handler to this instance of socket
-    sock.on('data', function(data) {
+    var remoteAdress = socket.remoteAddress + ":" + socket.remotePort;
+    console.log("New client connection is made %s".yellow, remoteAdress);
 
-        console.log('DATA ' + sock.remoteAddress + ': ' + data);
-        // Write the data back to the socket, the client will receive it as data from the server
-        sock.write('You said "' + data + '"');
-
+    socket.on('data',function(data){
+        console.log("Data sent from %s: %s".green,remoteAdress,data);
+        socket.write("Welcome, waiting for another player ...".yellow);
+        //agrego el cliente a la EDD
+        clients.push(socket.name);
     });
 
-    // Add a 'close' event handler to this instance of socket
-    sock.on('close', function(data) {
-        console.log('CLOSED: ' + sock.remoteAddress +' '+ sock.remotePort);
+    socket.once('close',function(){
+        console.log("Connection from %s closed".yellow,remoteAdress);
     });
 
-}).listen(PORT, HOST);
+    socket.on('error',function(err){
+        console.log("Connection %s error %s ".red,remoteAdress,err.message);
+    });
 
-console.log('Server listening on ' + HOST +':'+ PORT);
+});
+
+server.listen(PORT,function () {
+    console.log("server listening to %j".green,server.address());
+});

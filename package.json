@@ -1,0 +1,18 @@
+{
+  "name": "matchin_pool",
+  "version": "0.0.1",
+  "description": "Client and Server for matching players",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IntrudersLegion/MatchingPool.git"
+  },
+  "author": "Tuxe88",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IntrudersLegion/MatchingPool/issues"
+  },
+  "homepage": "https://github.com/IntrudersLegion/MatchingPool#readme"
+}
